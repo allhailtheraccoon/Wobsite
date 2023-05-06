@@ -1,11 +1,11 @@
 let t = 0;
-let state = 1;
+let state = 0;
 let smileyx = 3.4*200;
-let smileyy = 3.4*200;
+let smileyy = 3.4*100;
 let smileyxv= 0;
 let smileyyv= 0;
 function setup() {
-  createCanvas(3.4*400, 3.4*400);
+  createCanvas(3.4*400, 3.4*200);
   strokeWeight(1);
   colorMode(HSB);
   noFill();
@@ -50,11 +50,11 @@ function draw() {
   if(state==1){
     background(10);
     fill(10);
-    rect(20,20,3.4*400 - 40,3.4*400 - 40)
+    rect(20,20,3.4*400 - 40,3.4*200 - 40)
     strokeWeight(4)
     stroke(350,100,100)
     textSize(35);
-    text("beware the hungry smiley face",3.4*200-230,3.4*200)
+    text("beware the hungry smiley face",3.4*200-230,3.4*100)
     if(mouseX>smileyx){
       smileyxv+=0.2;
     }
@@ -83,11 +83,11 @@ function draw() {
     if(mouseX>20){
       if(mouseX<3.4 * 400 - 20){
         if(mouseY>20){
-          if(mouseY<3.4 * 400 - 20){
+          if(mouseY<3.4 * 200 - 20){
             if(dist(mouseX,mouseY,smileyx,smileyy)<20){
               state--;
               smileyx=3.4*200;
-              smileyy=3.4*200;
+              smileyy=3.4*100;
             }
           }
         }
