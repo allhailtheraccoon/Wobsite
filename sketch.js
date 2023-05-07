@@ -1,18 +1,25 @@
 let t = 0;
 let state = 0;
-let smileyx = 3.4*200;
-let smileyy = 3.4*100;
+let smileyx = 0;
+let smileyy = 0;
 let smileyxv= 0;
 let smileyyv= 0;
+var sound1;
+function preload(){
+  sound1 = loadSound("bell.wav")
+}
 function setup() {
   createCanvas(3.4*400, 3.4*200);
   strokeWeight(1);
   colorMode(HSB);
   noFill();
+  smileyx = random(0,3.4*400);
+  smileyy = random(0,3.4*400);
 }
 
 function draw() {
-  print(state);
+  
+  //print(state);
   
   if(state==0){
     background(0);
@@ -49,10 +56,32 @@ function draw() {
   }
   if(state==1){
     background(10);
+    
+    
     fill(10);
-    rect(20,20,3.4*400 - 40,3.4*200 - 40)
-    strokeWeight(4)
-    stroke(350,100,100)
+    rect(20,20,3.4*400 - 40,3.4*200 - 40);
+    let canvas = document.getElementsByTagName("canvas")[0];
+    fill(120,100,100);
+    rect(100,100,100,100);
+    stroke(0,100,100);
+    fill(50,100,100);
+    
+    canvas.style.cursor = "";
+    if(mouseX>100){if(mouseX<200){if(mouseY>100){if(mouseY<200){
+      canvas.style.cursor = "pointer";
+      stroke(300,100,100);
+      fill(250,100,100);
+      if(mouseIsPressed==1){
+        canvas.style.cursor = "";
+        state++;
+        sound1.play();
+      }
+    }}}}
+    textSize(30);
+    text("Button1",100,160);
+    strokeWeight(4);
+    fill(60,100,100);
+    stroke(350,100,100);
     textSize(35);
     text("beware the hungry smiley face",3.4*200-230,3.4*100)
     if(mouseX>smileyx){
@@ -86,18 +115,23 @@ function draw() {
           if(mouseY<3.4 * 200 - 20){
             if(dist(mouseX,mouseY,smileyx,smileyy)<20){
               state--;
-              smileyx=3.4*200;
-              smileyy=3.4*100;
+              smileyx=random(0,3.4*400);
+              smileyy=random(0,3.4*200);
             }
           }
         }
       }
     }
   }
+  if(state==2){
+    background(150,100,100);
+  }
   t += 0.01;
+  print(state);
 }
 function doubleClicked() {
   if(state<1){
     state++;
+    sound1.play();
   }
 }
