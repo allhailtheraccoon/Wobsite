@@ -6,6 +6,7 @@ let smileyxv= 0;
 let smileyyv= 0;
 var sound1;
 var sound2;
+var sound2playing = 0;
 let rows, cols, vectors;
 let px = [];
 let py = [];
@@ -199,7 +200,10 @@ function draw() {
 
 
   if(state==2){
-    sound2.play();
+    if(sound2playing==0){
+      sound2.play();
+    }
+    sound2playing=1;
     //background(150,100,100);
     fill(0,0,100,0.05);
     rect(0,0,width,height)
