@@ -6,6 +6,8 @@ let smileyxv= 0;
 let smileyyv= 0;
 var sound1;
 var sound2;
+var sound3;
+var sound3playing = 0;
 var sound2playing = 0;
 let rows, cols, vectors;
 let px = [];
@@ -15,9 +17,19 @@ let ps = [];
 let nump = 1500; //number of points
 let sc = 2;
 
+let sd = [10,67,73,34,21,2,23,78,81,12] //starting diameter
+let t2 = 0;   //time  2
+let rdr1 = 20;//random diameter range  1
+let rdr2 = 20;//random diameter range  2
+let rd1 = 0;  //random diameter  1
+let rd2 = 0;  //random diameter  2
+let rx = [];  //random x coord
+let ry = [];  //random z coord, just messin with you, it's the y coord
+
 function preload(){
   sound1 = loadSound("bell.wav");
   sound2 = loadSound("fog.mp3");
+  sound3 = loadSound("Ba-Song2.mp3");
   //img = loadImage('');
 }
 
@@ -116,8 +128,8 @@ function draw() {
         sound1.play();
       }
     }}}}
-    textSize(30);
-    text("Button2",width-202,160);
+    textSize(15);
+    text("Squiggly Blobs",width-200,157);
     
     fill(120,100,100);
     rect(width-200,height-200,100,100);
@@ -237,7 +249,30 @@ function draw() {
 
 
   if(state==3){
-    background(100,100,100);
+    if(sound3playing==0){
+      sound3.play();
+    }
+    sound3playing=1;
+    colorMode(HSB);
+    background(0,100,0);
+
+    for(var j=0; j<10; j++){
+      rx[j] = (1400*sqrt(noise(t+j))-205);
+      ry[j] = 50+(600*(noise(0,t2+j))-5);
+    }
+    for(var j=0; j<10; j++){
+      //stroke(360*noise(0,t2,j)+random(90),100,100);
+      noStroke(); 
+      fill(360*(sq(noise(j,t2))+2*noise(j,t2))/2,100-0.5*sqrt(noise(0,j,t2)),100+0*sqrt(noise(t2,0,j)),(noise(t2,j)))
+      beginShape();
+      for(var i = 0; i<2*PI; i+=PI/64){
+        rd1 = 10*noise(j,t,i+t)*rdr1;
+        rd2 = 10*noise(t2,j,i+t)*rdr2;
+        vertex(rx[j]+(sd[j]+rd1)*sin(i)+110*j-525,ry[j]+(sd[j]+rd2)*cos(i));  
+      }
+      endShape(CLOSE);
+    }
+    t2+=0.00618;
   }
 
   
