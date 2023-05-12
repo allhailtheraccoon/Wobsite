@@ -98,9 +98,9 @@ function draw() {
     translate(width/2, height/2);
     stroke(255,100,100);
     strokeWeight(4);
-    textSize(35);
+    textSize(65);
     fill((240+360*(sin(t)+1)/2)%360,100,100);
-    text("test website",-44,25);
+    text("test website",-61,55);
     strokeWeight(1);
     noFill()
     beginShape();
@@ -108,8 +108,8 @@ function draw() {
       let xoff = map(cos(angle), -1, 1, 0, 2);
       let yoff = map(sin(angle), -1, 1, 0, 2);
       let r = noise(xoff, yoff, t) * 200 + 50;
-      let x = r * cos(angle);
-      let y = r * sin(angle);
+      let x = 1.7*r * cos(angle);
+      let y = 1.7*r * sin(angle);
       stroke((120+360*(sin(t)+1)/2)%360, 100, 100);
       vertex(x, y);
     }
@@ -117,13 +117,13 @@ function draw() {
     stroke(255,100,100);
     strokeWeight(4);
     fill((240+360*(sin(t)+1)/2)%360,100,100);
-    textSize(35);
-    text("welcome",-65,-10);
-    text("to the",-152,25);
-    textSize(10);
+    textSize(65);
+    text("welcome",-125,-10);
+    text("to the",-265,55);
+    textSize(25);
     noStroke();
     fill((0+360*(sin(t)+1)/2)%360,100,100);
-    text("double-click to go forward",-54,0);
+    text("double-click to go forward",-141,12);
     fill(0);
   }//opening page
 
@@ -136,10 +136,10 @@ function draw() {
     
     let canvas = document.getElementsByTagName("canvas")[0];canvas.style.cursor = "";
     
-    fill(120,100,100);
+    fill((t*20 + 90)%360,100,100);
     rect(100,100,100,100);
     stroke(0,100,100);
-    fill(50,100,100);
+    fill((t*20 + 270)%360,100,100);
     if(mouseX>100){if(mouseX<200){if(mouseY>100){if(mouseY<200){
       canvas.style.cursor = "pointer";
       stroke(300,100,100);
@@ -150,13 +150,13 @@ function draw() {
         sound1.play();
       }
     }}}}
-    textSize(19);
-    text("shag carpet",100,156);
+    textSize(17);
+    text("shag carpet",100,153);
     
-    fill(120,100,100);
+    fill((t*20)%360,100,100);
     rect(width-200,100,100,100);
     stroke(0,100,100);
-    fill(50,100,100);
+    fill((t*20 + 180)%360,100,100);
     if(mouseX>width-200){if(mouseX<width-100){if(mouseY>100){if(mouseY<200){
       canvas.style.cursor = "pointer";
       stroke(300,100,100);
@@ -167,13 +167,13 @@ function draw() {
         sound1.play();
       }
     }}}}
-    textSize(15);
-    text("Squiggly Blobs",width-200,157);
+    textSize(13);
+    text("Squiggly Blobs",width-200,154);
     
-    fill(120,100,100);
+    fill((t*20 + 180)%360,100,100);
     rect(width-200,height-200,100,100);
     stroke(0,100,100);
-    fill(50,100,100);
+    fill((t*20)%360,100,100);
     if(mouseX>width-200){if(mouseX<width-100){if(mouseY>height-200){if(mouseY<height-100){
       canvas.style.cursor = "pointer";
       stroke(300,100,100);
@@ -184,13 +184,13 @@ function draw() {
         sound1.play();
       }
     }}}}
-    textSize(30);
-    text("Button3",width-202,height-140);    
+    textSize(25);
+    text("Button4",width-200,height-143);    
 
-    fill(120,100,100);
+    fill((t*20 + 270)%360,100,100);
     rect(100,height-200,100,100);
     stroke(0,100,100);
-    fill(50,100,100);
+    fill((t*20 + 90)%360,100,100);
     if(mouseX>100){if(mouseX<200){if(mouseY>height-200){if(mouseY<height-100){
       canvas.style.cursor = "pointer";
       stroke(300,100,100);
@@ -201,12 +201,12 @@ function draw() {
         sound1.play();
       }
     }}}}
-    textSize(30);
-    text("Button4",100,height-140);
+    textSize(19);
+    text("Silly String",100,height-143);
 
     strokeWeight(4);
-    fill(60,100,100);
-    stroke(350,100,100);
+    fill((t*43 + 225)%360,100,100);
+    stroke((t*43 + 45)%360,100,100);
     textSize(35);
     text("beware the hungry smiley face",3.4*200-230,3.4*100)
     if(mouseX>smileyx){
