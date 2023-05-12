@@ -26,6 +26,24 @@ let rd2 = 0;  //random diameter  2
 let rx = [];  //random x coord
 let ry = [];  //random z coord, just messin with you, it's the y coord
 
+var ssruletable = [];
+var ssruletabledistance = [];
+var ssruletabledistance2 = [];
+var ssspeedy = [];
+var ssnumstates = 5;
+var ssc = [];
+var ssx = [];
+var ssy = [];
+var ssxv = [];
+var ssyv = [];
+var ssxa = [];
+var ssya = [];
+var ssf = 0;
+var ssdx = 0;
+var ssdy = 0;
+var ssg = -0.1;
+var ssfirstq = 0;
+
 function preload(){
   sound1 = loadSound("bell.wav");
   sound2 = loadSound("fog.mp3");
@@ -34,6 +52,7 @@ function preload(){
 }
 
 function setup() {
+  textFont("MuseoModerno")
   createCanvas(3.4*400, 3.4*200);
   strokeWeight(1);
   colorMode(HSB);
@@ -49,6 +68,24 @@ function setup() {
     pc.push(0);
     ps.push(random(0,100));
   }
+  
+  for(var i = 0; i<ssnumstates*ssnumstates; i++){
+      ssruletable.push(random(-0.1,0.1));
+      ssruletabledistance.push(random(90,90));
+      ssruletabledistance2.push(random(0,80));
+
+  }
+  for(var i=0; i<200; i++){
+      ssc[i] = floor(random(0,ssnumstates));
+      ssx[i]=random(0,width);
+      ssy[i]=random(0,height);
+      ssxv[i]=0;
+      ssyv[i]=0;
+      ssxa[i]=0;
+      ssya[i]=0;
+      ssspeedy[i]=1.5;//0.5+c[i]/(numstates-1);
+  }
+  frameRate(500);
 }
 
 function draw() {
@@ -56,13 +93,14 @@ function draw() {
   //print(state);
   
   if(state==0){
-    background(0);
+    colorMode(HSB)
+    background(0,0,0);
     translate(width/2, height/2);
     stroke(255,100,100);
     strokeWeight(4);
     textSize(35);
     fill((240+360*(sin(t)+1)/2)%360,100,100);
-    text("test website",-47,25);
+    text("test website",-44,25);
     strokeWeight(1);
     noFill()
     beginShape();
@@ -81,7 +119,7 @@ function draw() {
     fill((240+360*(sin(t)+1)/2)%360,100,100);
     textSize(35);
     text("welcome",-65,-10);
-    text("to the",-145,25);
+    text("to the",-152,25);
     textSize(10);
     noStroke();
     fill((0+360*(sin(t)+1)/2)%360,100,100);
@@ -91,6 +129,7 @@ function draw() {
 
 
   if(state==1){
+    colorMode(HSB);
     background(10);    
     fill(185,100,40);
     rect(20,20,3.4*400 - 40,3.4*200 - 40);
@@ -212,6 +251,7 @@ function draw() {
 
 
   if(state==2){
+    colorMode(HSB)
     if(sound2playing==0){
       sound2.play();
     }
@@ -282,7 +322,98 @@ function draw() {
 
 
   if(state==5){
-    background(200,100,100);
+    colorMode(RGB);
+    if(ssfirstq===0){
+      background(50, 20, 30);
+    }
+    ssfirstq=1;
+    for(var i=0; i<ssruletable.length+1; i++){
+        stroke(255, 255, 255);
+        //text(ruletable[i],10,10 + 10*i);
+    }
+    for(var i=0; i<ssruletabledistance.length; i++){
+        stroke(255, 255, 255);
+        //text(floor(ruletabledistance[i]),49,10 + 10*i);
+    }
+    for(var i=0; i<ssruletabledistance2.length; i++){
+        stroke(255, 255, 255);
+        //text(floor(ruletabledistance2[i]),73,10 + 10*i);
+    }
+    for(var i = 0; i<200; i++){
+        ssxa[i]=0;
+        ssya[i]=0;
+        for(var j=0; j<200; j++){
+            ssdx = (ssx[j]-ssx[i]);
+            ssdy = (ssy[j]-ssy[i]);
+            if(sqrt(sq(ssdx)+sq(ssdy))>ssruletabledistance2[ssc[i]+ssc[j]*ssnumstates]){
+                if(sqrt(sq(ssdx)+sq(ssdy))<ssruletabledistance[ssc[i]+ssc[j]*ssnumstates]){
+                    if(i === j){
+                        }
+                    else{
+                        if(ssc[i] === ssc[j]){
+                            ssg = -0.1;
+                        }
+                        else{
+                            //ssg = -0.3;
+                        }
+                        if(ssc[i] === (1+ssc[j])%ssnumstates){
+                            ssg = 1;
+                        }
+                        if(ssc[i] === (2+ssc[j])%ssnumstates){
+                            ssg = -0.3;
+                        }
+
+                        //ssg = ssruletable[ssc[i]+ssc[j]*ssnumstates];
+                        ssf = ssg/sqrt(sq(ssdx)+sq(ssdy));
+                        ssxa[i] += ssf*ssdx;
+                        ssya[i] += ssf*ssdy;
+                    }
+                }
+            }
+        }
+        //xa[i]/=1.000;
+        //ya[i]/=1.000;
+        ssxv[i]=(ssxv[i]+ssxa[i])/ssspeedy[i];
+        ssyv[i]=(ssyv[i]+ssya[i])/ssspeedy[i];
+        
+        ssx[i]+=ssxv[i];
+        ssy[i]+=ssyv[i];
+        if(ssx[i]<10){
+            ssxv[i]*=-1;
+            ssx[i]+=10;
+        }
+        if(ssy[i]<10){
+            ssyv[i]*=-1;
+            ssy[i]+=10;
+        }
+        if(ssx[i]>width-10){
+            ssxv[i]*=-1;
+            ssx[i]-=10;
+        }
+        if(ssy[i]>height-10){
+            ssyv[i]*=-1;
+            ssy[i]-=10;
+        }
+        //println(x[i]);
+        strokeWeight(2);
+        if(ssc[i]===0){
+            stroke(200, 0, 0);
+        }
+        if(ssc[i]===1){
+            stroke(0, 200, 0);
+        }
+        if(ssc[i]===2){
+            stroke(0, 0, 200);
+        }
+        if(ssc[i]===3){
+            stroke(200, 200, 0);
+        }
+        if(ssc[i]===4){
+            stroke(200, 44, 200);
+        }
+        point(ssx[i],ssy[i]);
+    }
+      
   }
 
 
