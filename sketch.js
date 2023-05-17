@@ -44,6 +44,10 @@ var ssdy = 0;
 var ssg = -0.1;
 var ssfirstq = 0;
 
+let wtt = 0;
+let wtmousexp = 0;
+let wtmouseyp = 0;
+
 function preload(){
   sound1 = loadSound("bell.wav");
   sound2 = loadSound("fog.mp3");
@@ -185,7 +189,7 @@ function draw() {
       }
     }}}}
     textSize(25);
-    text("Button4",width-200,height-143);    
+    text("Triangle",width-200,height-143);    
 
     fill((t*20 + 270)%360,100,100);
     rect(100,height-200,100,100);
@@ -317,7 +321,13 @@ function draw() {
 
   
   if(state==4){
-    background(50,100,100);
+    background(0);
+    wtt += 0.000001;
+    wtt += dist(mouseX,mouseY,wtmousexp,wtmouseyp)/1000
+    wtmousexp = mouseX;
+    wtmouseyp = mouseY;
+    colorMode(RGB);
+    drawTriangle(width/2, 25, width-280, height-25, 280, height-25, 6);
   }
 
 
@@ -436,4 +446,32 @@ function create2DArray(rows, cols) {
     arr[i] = new Array(cols);
   }
   return arr;
+}
+
+
+function drawTriangle(x1, y1, x2, y2, x3, y3, depth) {
+  noFill();
+  stroke(255);
+  strokeWeight(1);
+  
+  if (depth > 0) {
+    let nx1 = x1 + noise(wtt) * (x2 - x1);
+    let ny1 = y1 + noise(wtt) * (y2 - y1);
+    let nx2 = x2 + noise(0,wtt) * (x3 - x2);
+    let ny2 = y2 + noise(0,wtt) * (y3 - y2);
+    let nx3 = x3 + noise(0,wtt) * (x1 - x3);
+    let ny3 = y3 + noise(0,wtt) * (y1 - y3);
+    stroke(255*noise(wtt+nx1/20+ny1/20),255*noise(0,wtt+nx2/20+ny2/20),255*noise(0,0,nx3/20+ny3/20+wtt+depth));
+    fill(255*noise(-wtt+nx1/20+ny1/20),255*noise(0,-wtt+nx2/20+ny2/20),255*noise(0,0,nx3/20+ny3/20-wtt+depth));
+    beginShape();
+    vertex(nx1, ny1);
+    vertex(nx2, ny2);
+    vertex(nx3, ny3);
+    endShape(CLOSE);
+
+    drawTriangle(x1, y1, nx1, ny1, nx3, ny3, depth - 1);
+    drawTriangle(nx1, ny1, x2, y2, nx2, ny2, depth - 1);
+    drawTriangle(nx3, ny3, nx2, ny2, x3, y3, depth - 1);
+    drawTriangle(nx1, ny1, nx2, ny2, nx3, ny3, depth - 1);
+  }
 }
