@@ -1,3 +1,5 @@
+let cooldownforbackbutton = 0.5;
+let backbuttonenabled = 0;
 let t = 0;
 let state = 0;
 let smileyx = 0;
@@ -16,6 +18,7 @@ let pc = [];
 let ps = [];
 let nump = 1500; //number of points
 let sc = 2;
+
 
 let sd = [10,67,73,34,21,2,23,78,81,12] //starting diameter
 let t2 = 0;   //time  2
@@ -133,9 +136,11 @@ function draw() {
 
 
   if(state==1){
+    sound2.stop();
     colorMode(HSB);
     background(10);    
     fill(185,100,40);
+    stroke(200,100,100);
     rect(20,20,3.4*400 - 40,3.4*200 - 40);
     
     let canvas = document.getElementsByTagName("canvas")[0];canvas.style.cursor = "";
@@ -255,14 +260,16 @@ function draw() {
 
 
   if(state==2){
-    colorMode(HSB)
+    ssfirstq=0;
+    sound3.stop();
+    colorMode(HSB);
     if(sound2playing==0){
       sound2.play();
     }
     sound2playing=1;
     //background(150,100,100);
     fill(0,0,100,0.05);
-    rect(0,0,width,height)
+    rect(0,0,width,height);
     // Update vectors based on noise
     for (let i = 0; i < rows; i++) {
       for (let j = 0; j < cols; j++) {
@@ -293,6 +300,8 @@ function draw() {
 
 
   if(state==3){
+    sound2.stop();
+    sound2playing=0;
     if(sound3playing==0){
       sound3.play();
     }
@@ -317,10 +326,14 @@ function draw() {
       endShape(CLOSE);
     }
     t2+=0.00618;
-  }
+  }//squiggly blobs
 
   
   if(state==4){
+    sound3.stop();
+    sound2.stop();
+    sound2playing=0;
+    sound3playing=0;
     background(0);
     wtt += 0.000001;
     wtt += dist(mouseX,mouseY,wtmousexp,wtmouseyp)/1000
@@ -328,10 +341,14 @@ function draw() {
     wtmouseyp = mouseY;
     colorMode(RGB);
     drawTriangle(width/2, 25, width-280, height-25, 280, height-25, 6);
-  }
+  }//wiggly triangles
 
 
   if(state==5){
+    sound3.stop();
+    sound2.stop();
+    sound2playing=0;
+    sound3playing=0;
     colorMode(RGB);
     if(ssfirstq===0){
       background(50, 20, 30);
@@ -424,18 +441,68 @@ function draw() {
         point(ssx[i],ssy[i]);
     }
       
+  }//silly string
+
+  if(state==-1){
+    background(0,0,0);
+    textSize(50);
+    text("Welcome To Negative Land",width/2 - 400,height/2 - 20);
+    textSize(30);
+    text("there will be more here soon",width/2 - 230,height/2 + 20);
   }
 
-
   t += 0.01;
-  print(state);
+  
+  stroke(random(0,360),random(0,255),random(0,255));
+  textSize(10);
+  strokeWeight(1);
+  text(state,20,20);
+  cooldownforbackbutton-=0.004;
+  //print(state);
+  if(backbuttonenabled===1){
+    colorMode(RGB)
+    fill(100,100,100,80);
+    stroke(100,100,100,180);
+    if(state!==0){
+      triangle(20,40,50,20,50,60);
+    }
+    else{
+      triangle(20-width/2,40-height/2,50-width/2,20-height/2,50-width/2,60-height/2);
+    }
+    if(mouseIsPressed==1){
+      if(mouseX<50){
+        if(mouseY<60){
+          if(cooldownforbackbutton<0){
+            state--;
+            cooldownforbackbutton = 0.5;
+          }
+        }
+      }
+    }
+  }
 }
+
+function keyTyped() {
+    if (key === 'b') {
+      if(state!==0){
+        backbuttonenabled = 1;
+      }
+    }
+  }
 
 
 function doubleClicked() {
   if(state<1){
     state++;
     sound1.play();
+  }
+  else{
+    if(state>1){
+      if(state<6){
+        state = (state-1)%4 + 2;
+        sound1.play();
+      }
+    }
   }
 }
 
